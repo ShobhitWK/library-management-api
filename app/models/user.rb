@@ -1,6 +1,6 @@
 class User < ApplicationRecord
 
-  # Before saving a email this will downcase the email
+  # Before saving a email this will downcase the emaill
   before_save { self.email = email.downcase}
 
   # Associations
