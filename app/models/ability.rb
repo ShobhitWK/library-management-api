@@ -15,6 +15,7 @@ class Ability
 
       if user.role.name == "student"
         can %i[read], Book
+        can %i[read], Issuedbook, user: user
       end
 
     end

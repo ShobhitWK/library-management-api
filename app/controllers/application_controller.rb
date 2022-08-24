@@ -1,5 +1,5 @@
 class ApplicationController < ActionController::API
-  # before_action :authenticate_user! # for internal server errors, this will check whether user is logged in or not
+  before_action :authenticate_user! # for internal server errors, this will check whether user is logged in or not
   before_action :configure_permitted_parameters, if: :devise_controller?
 
   # Errors Handling
@@ -74,16 +74,125 @@ class ApplicationController < ActionController::API
   def gen_users
     users = []
     @users.each do |user|
-      users << {
+      if user.library_name == nil
+        users << {
+          id: user.id,
+          email: user.email,
+          user_name: user.name,
+          user_role: user.role.name,
+          role_id: user.role_id,
+          address: user.address,
+          user_url: users_user_url(user),
+          created_at: user.created_at,
+          updated_at: user.updated_at
+        }
+      else
+        users << {
+          id: user.id,
+          email: user.email,
+          user_name: user.name,
+          user_role: user.role.name,
+          role_id: user.role_id,
+          address: user.address,
+          library_name: user.library_name,
+          books_amount: user.books.length,
+          user_url: users_user_url(user),
+          created_at: user.created_at,
+          updated_at: user.updated_at
+        }
+      end
+    end
+    return users
+  end
+
+  def gen_user
+    user = @user
+    user_data=[]
+    if user.library_name == nil
+      user_data << {
         id: user.id,
+        email: user.email,
         user_name: user.name,
         user_role: user.role.name,
+        role_id: user.role_id,
+        address: user.address,
+        user_url: users_user_url(user),
+        created_at: user.created_at,
+        updated_at: user.updated_at
+      }
+    else
+      user_data << {
+        id: user.id,
         email: user.email,
+        user_name: user.name,
+        user_role: user.role.name,
+        role_id: user.role_id,
+        address: user.address,
+        library_name: user.library_name,
+        books_amount: user.books.length,
+        books: gen_user_books(user),
+        user_url: users_user_url(user),
         created_at: user.created_at,
         updated_at: user.updated_at
       }
     end
-    return users
+  end
+
+  def gen_user_books(user)
+    books = user.books.all
+    data=[]
+    books.each do |book|
+      data << {
+        book_id: book.id,
+        book_name: book.name,
+        book_author: book.author,
+        book_description: book.description,
+        book_edition: book.edition,
+        book_quantity: book.quantity,
+        book_created_at: book.created_at,
+        book_updated_at: book.updated_at
+      }
+    end
+    return data
+  end
+
+  def gen_book_data(many=false)
+    data=[]
+    if many == true
+      @books.each do |book|
+        data << {
+          book_id: book.id,
+          book_name: book.name,
+          book_author: book.author,
+          book_description: book.description,
+          book_edition: book.edition,
+          book_quantity: book.quantity,
+          book_creator_id: book.user.id,
+          book_created_by: book.user.name,
+          book_creator_email: book.user.email,
+          book_library_name: book.user.library_name,
+          book_created_at: book.created_at,
+          book_updated_at: book.updated_at
+        }
+      end
+    else
+      book = @book
+      data << {
+        book_id: book.id,
+        book_name: book.name,
+        book_author: book.author,
+        book_description: book.description,
+        book_edition: book.edition,
+        book_quantity: book.quantity,
+        book_creator_id: book.user.id,
+        book_created_by: book.user.name,
+        book_creator_email: book.user.email,
+        book_library_name: book.user.library_name,
+        book_created_at: book.created_at,
+        book_updated_at: book.updated_at
+      }
+    end
+    return data
   end
 
 end

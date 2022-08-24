@@ -8,9 +8,9 @@ class Users::SessionsController < Devise::SessionsController
   def respond_with(resource, _opts = {})
     if current_user
       # UserMailer.welcome_email(current_user).deliver_later
-      success_response("User Logged in Sucessfully")
+      success_response("#{current_user.name}! You're logged in Sucessfully")
     else
-      faliure_response("User is not logged in.")
+      faliure_response("Login first to continue")
     end
   end
 
@@ -24,6 +24,6 @@ class Users::SessionsController < Devise::SessionsController
   end
 
   def log_out_failure
-    faliure_response("User Logout Failed!")
+    faliure_response("#{current_user.name}! Logout Failed!")
   end
 end
