@@ -7,7 +7,8 @@ class Users::SessionsController < Devise::SessionsController
 
   def respond_with(resource, _opts = {})
     if current_user
-      # UserMailer.welcome_email(current_user).deliver_later
+      # User sign in mail
+      UserMailer.welcome_email(current_user).deliver_later
       success_response("#{current_user.name}! You're logged in Sucessfully")
     else
       faliure_response("Login first to continue")
