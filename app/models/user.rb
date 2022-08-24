@@ -23,7 +23,7 @@ class User < ApplicationRecord
                         format: { with: VALID_EMAIL_REGEX }
 
   validates :address, presence: true,
-                        length: {mini}
+                        length: {minimum: 7, maximum: 300}
 
   validates :name, presence: true,
                         length: {minimum: 3}
