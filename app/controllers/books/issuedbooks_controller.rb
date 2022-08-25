@@ -9,8 +9,11 @@ class Books::IssuedbooksController < ApplicationController
     else
       @issuedbooks = current_user.issuedbooks
     end
-    # render json: @issuedbooks
-    show_info({issuedbooks: gen_issued_book(many=true)})
+    if @issuedbooks.empty?
+      show_info({message:"there are no books to show"})
+    else
+      show_info({issuedbooks: gen_issued_book(many=true)})
+    end
   end
 
   # GET /issuedbooks/1
@@ -48,7 +51,7 @@ class Books::IssuedbooksController < ApplicationController
           @issuedbook.book.save
           render json: {book_issued: gen_issued_book}, status: :created, location: @issuedbook
         else
-          render json: @issuedbook.errors, status: :unprocessable_entity
+          handle_error @issuedbook.errors
         end
       else
         faliure_response("Book is not available for issuing.")
@@ -62,9 +65,9 @@ class Books::IssuedbooksController < ApplicationController
       faliure_response("Cant't update, the book is already returned")
     else
       if @issuedbook.update(issuedbook_params)
-        render json: @issuedbook
+        show_info gen_issued_book
       else
-        render json: @issuedbook.errors, status: :unprocessable_entity
+        handle_error @issuedbook.errors
       end
     end
   end
