@@ -117,6 +117,7 @@ class ApplicationController < ActionController::API
         role_id: user.role_id,
         address: user.address,
         user_url: users_user_url(user),
+        issued_books: gen_issued_book(many=true,custom=user),
         created_at: user.created_at,
         updated_at: user.updated_at
       }
@@ -195,7 +196,10 @@ class ApplicationController < ActionController::API
     return data
   end
 
-  def gen_issued_book(many=false)
+  def gen_issued_book(many=false,custom=nil)
+    if custom
+      @issuedbooks = custom.issuedbooks
+    end
     data=[]
     if many == true
       @issuedbooks.each do |issuedbook|

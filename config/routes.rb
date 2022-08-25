@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
 
+  root 'users/users#profile'
+
   # roles routes
   resources :roles, controller: "users/roles"
   resources :issuedbooks, controller: "books/issuedbooks"
