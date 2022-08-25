@@ -28,22 +28,31 @@ class Books::IssuedbooksController < ApplicationController
   def create
 
     @issuedbook = Issuedbook.new(issuedbook_creation_params)
-    if @issuedbook.book.quantity > 0
-
-      @issuedbook.book.quantity -= 1
-      @issuedbook.user = current_user
-      @issuedbook.is_returned = false
-      @issuedbook.issued_on = DateTime.now
-      @issuedbook.fine = 20.00
-
-      if @issuedbook.save
-        @issuedbook.book.save
-        render json: {book_issued: gen_issued_book}, status: :created, location: @issuedbook
-      else
-        render json: @issuedbook.errors, status: :unprocessable_entity
-      end
+    books = current_user.issuedbooks
+    array = []
+    books.each do |book|
+      array << book.book_id
+    end
+    if array.include?(@issuedbook.book.id)
+      faliure_response("you already have this book issued")
     else
-      faliure_response("Book is not available for issuing.")
+      if @issuedbook.book.quantity > 0
+
+        @issuedbook.book.quantity -= 1
+        @issuedbook.user = current_user
+        @issuedbook.is_returned = false
+        @issuedbook.issued_on = DateTime.now
+        @issuedbook.fine = 20.00
+
+        if @issuedbook.save
+          @issuedbook.book.save
+          render json: {book_issued: gen_issued_book}, status: :created, location: @issuedbook
+        else
+          render json: @issuedbook.errors, status: :unprocessable_entity
+        end
+      else
+        faliure_response("Book is not available for issuing.")
+      end
     end
   end
 
@@ -64,7 +73,8 @@ class Books::IssuedbooksController < ApplicationController
   def destroy
     if @issuedbook.destroy
       if @issuedbook.is_returned == false
-        @issuebook.book.quantity += 1
+        @issuedbook.book.quantity += 1
+        success_response("IssuedBook-request deleted successfully with id: #{@issuedbook.id}, issuer_name: #{@issuedbook.user.name}, book_creator: #{@issuedbook.book.user.name}")
       else
         @issuedbook.book.save
         success_response("IssuedBook-request deleted successfully with id: #{@issuedbook.id}, issuer_name: #{@issuedbook.user.name}, book_creator: #{@issuedbook.book.user.name}")
