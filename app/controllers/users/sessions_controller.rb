@@ -9,7 +9,7 @@ class Users::SessionsController < Devise::SessionsController
     if current_user
       # User sign in mail
       # UserMailer.welcome_email(current_user).deliver_later
-      show_info({message:"#{current_user.name}! You're logged in Successfully"})
+      show_info({message:"#{current_user.name}! You're logged in Successfully"}) # ,jwt: response.headers.to_h
     else
       faliure_response("Login first to continue")
     end

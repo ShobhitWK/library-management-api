@@ -13,6 +13,7 @@ Devise.setup do |config|
   # Jwt token
   config.jwt do |jwt|
     jwt.secret = Rails.application.credentials.devise[:jwt_secret_key]
+    jwt.expiration_time = 120.minutes.to_i # Token expiration time
   end
 
   # The secret key used by Devise. Devise uses this key to generate
