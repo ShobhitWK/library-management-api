@@ -9,7 +9,7 @@ class Users::SessionsController < Devise::SessionsController
     if current_user
       # User sign in mail
       # UserMailer.welcome_email(current_user).deliver_later
-      success_response("#{current_user.name}! You're logged in Sucessfully")
+      show_info({message:"#{current_user.name}! You're logged in Successfully"})
     else
       faliure_response("Login first to continue")
     end
@@ -21,7 +21,7 @@ class Users::SessionsController < Devise::SessionsController
   end
 
   def log_out_success
-    success_response("User Logged out Sucessfully")
+    success_response("#{current_user.name}! Logged out Successfully")
   end
 
   def log_out_failure
