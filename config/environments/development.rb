@@ -79,4 +79,6 @@ Rails.application.configure do
   config.exceptions_app = self.routes
   config.action_mailer.perform_deliveries = true
 
+  config.hosts << /[a-z0-9-]+\.in\.ngrok\.io/
+
 end

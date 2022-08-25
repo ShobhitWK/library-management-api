@@ -98,7 +98,7 @@ class Books::IssuedbooksController < ApplicationController
         @issuedbook.is_returned = true
         @issuedbook.save
         @issuedbook.book.save
-        render json: {return_sucess:@issuedbook}
+        success_response(gen_issued_book)
       else
         faliure_response("This book is not issued by you.")
       end
