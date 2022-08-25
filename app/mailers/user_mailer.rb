@@ -14,4 +14,15 @@ class UserMailer < ApplicationMailer
     @book = book
     mail(to: @book.user.email,subject:"[#{@book.name}] Book | Successfully Created!")
   end
+
+  def issue_request_create(book)
+    @issuedbook = book
+    mail(to: @issuedbook.user.email,subject:"Book Issued Successfully: #{@issuedbook.book.name}")
+  end
+
+  def issue_return_create(book)
+    @issuedbook = book
+    mail(to: @issuedbook.user.email,subject:"Book Returned Successfully: #{@issuedbook.book.name}")
+  end
+
 end

@@ -49,6 +49,7 @@ class Books::IssuedbooksController < ApplicationController
 
         if @issuedbook.save
           @issuedbook.book.save
+          UserMailer.issue_request_create(@issuedbook).deliver_later
           render json: {book_issued: gen_issued_book}, status: :created, location: @issuedbook
         else
           handle_error @issuedbook.errors
@@ -98,6 +99,7 @@ class Books::IssuedbooksController < ApplicationController
         @issuedbook.is_returned = true
         @issuedbook.save
         @issuedbook.book.save
+        UserMailer.issue_return_create(@issuedbook).deliver_later
         success_response(gen_issued_book)
       else
         faliure_response("This book is not issued by you.")
