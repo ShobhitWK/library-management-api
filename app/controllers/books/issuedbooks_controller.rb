@@ -29,7 +29,7 @@ class Books::IssuedbooksController < ApplicationController
 
     @issuedbook = Issuedbook.new(issuedbook_creation_params)
     if @issuedbook.book.quantity > 0
-      
+
       @issuedbook.book.quantity -= 1
       @issuedbook.user = current_user
       @issuedbook.is_returned = false
@@ -63,9 +63,12 @@ class Books::IssuedbooksController < ApplicationController
   # DELETE /issuedbooks/1
   def destroy
     if @issuedbook.destroy
-      @issuebook.book.quantity += 1
-      @issuedbook.book.save
-      success_response("IssuedBook-request deleted successfully with id: #{@issuedbook.id}, issuer_name: #{@issuedbook.user.name}, book_creator: #{@issuedbook.book.user.name}")
+      if @issuedbook.is_returned == false
+        @issuebook.book.quantity += 1
+      else
+        @issuedbook.book.save
+        success_response("IssuedBook-request deleted successfully with id: #{@issuedbook.id}, issuer_name: #{@issuedbook.user.name}, book_creator: #{@issuedbook.book.user.name}")
+      end
     else
       faliure_response("IssuedBook-request is not deleted")
     end
