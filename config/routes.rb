@@ -4,6 +4,8 @@ Rails.application.routes.draw do
   resources :roles, controller: "users/roles"
   resources :issuedbooks, controller: "books/issuedbooks"
 
+  post 'issuedbooks/return/:id', to: "books/issuedbooks#return"
+
   # This will generate devise routes
   devise_for :users,
              controllers: {

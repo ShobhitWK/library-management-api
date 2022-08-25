@@ -11,11 +11,12 @@ class Ability
 
       if user.role.name == "admin"
         can :manage, :all
+        cannot :create, Issuedbook
       end
 
       if user.role.name == "student"
         can %i[read], Book
-        can %i[read], Issuedbook, user: user
+        can %i[read create return], Issuedbook, user: user
       end
 
     end
