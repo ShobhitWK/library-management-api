@@ -1,5 +1,5 @@
 class Issuedbook < ApplicationRecord
-  
+
   # Associations
   belongs_to :book
   belongs_to :user
@@ -11,5 +11,6 @@ class Issuedbook < ApplicationRecord
   validates :issued_on, presence: true
   validates :user_id, presence: true
   validates :fine, presence: true
+  validates :submittion, presence: true
 
 end

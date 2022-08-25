@@ -195,4 +195,68 @@ class ApplicationController < ActionController::API
     return data
   end
 
+  def gen_issued_book(many=false)
+    data=[]
+    if many == true
+      @issuedbooks.each do |issuedbook|
+        data << {
+          id: issuedbook.id,
+          issued_to_user_id: issuedbook.user.id,
+          issued_to_user_name: issuedbook.user.name,
+          issued_to_user_address: issuedbook.user.address,
+          is_returned: issuedbook.is_returned,
+          returned_on: issuedbook.return_dt,
+          issue_created_at: issuedbook.created_at,
+          issue_updated_at: issuedbook.updated_at,
+          issued_on: issuedbook.issued_on,
+          fine_per_day: issuedbook.fine,
+          bookinfo: {
+            book_id: issuedbook.book.id,
+            book_name: issuedbook.book.name,
+            book_author: issuedbook.book.author,
+            book_description: issuedbook.book.description,
+            book_edition: issuedbook.book.edition,
+            book_quantity: issuedbook.book.quantity,
+            book_creator_id: issuedbook.book.user.id,
+            book_created_by: issuedbook.book.user.name,
+            book_creator_email: issuedbook.book.user.email,
+            book_library_name: issuedbook.book.user.library_name,
+            book_created_at: issuedbook.book.created_at,
+            book_updated_at: issuedbook.book.updated_at
+          }
+        }
+      end
+    else
+      issuedbook = @issuedbook
+      data << {
+        id: issuedbook.id,
+        issued_to_user_id: issuedbook.user.id,
+        issued_to_user_name: issuedbook.user.name,
+        issued_to_user_address: issuedbook.user.address,
+        is_returned: issuedbook.is_returned,
+        returned_on: issuedbook.return_dt,
+        issue_created_at: issuedbook.created_at,
+        issue_updated_at: issuedbook.updated_at,
+        issued_on: issuedbook.issued_on,
+        fine_per_day: issuedbook.fine,
+        submittion_by: issuedbook.submittion,
+        bookinfo: {
+          book_id: issuedbook.book.id,
+          book_name: issuedbook.book.name,
+          book_author: issuedbook.book.author,
+          book_description: issuedbook.book.description,
+          book_edition: issuedbook.book.edition,
+          book_quantity: issuedbook.book.quantity,
+          book_creator_id: issuedbook.book.user.id,
+          book_created_by: issuedbook.book.user.name,
+          book_creator_email: issuedbook.book.user.email,
+          book_library_name: issuedbook.book.user.library_name,
+          book_created_at: issuedbook.book.created_at,
+          book_updated_at: issuedbook.book.updated_at
+        }
+      }
+    end
+    return data
+  end
+
 end

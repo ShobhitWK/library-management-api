@@ -1,9 +1,8 @@
 Rails.application.routes.draw do
 
-
-
   # roles routes
   resources :roles, controller: "users/roles"
+  resources :issuedbooks, controller: "books/issuedbooks"
 
   # This will generate devise routes
   devise_for :users,
@@ -23,7 +22,6 @@ Rails.application.routes.draw do
 
   # books routes
   namespace :books do
-    # resources :issuedbooks
     resources :books, path: '/'
   end
 
