@@ -10,4 +10,8 @@ class UserMailer < ApplicationMailer
     mail(to: @user.email,subject:"Welcome to Library Management API")
   end
 
+  def new_book_creation(book)
+    @book = book
+    mail(to: @book.user.email,subject:"[#{@book.name}] Book | Successfully Created!")
+  end
 end

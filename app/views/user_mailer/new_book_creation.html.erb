@@ -1,0 +1,16 @@
+<h1>Your book has been created!</h1>
+<p>Here are the details of the book.</p>
+<p>
+book_id: <%= @book.id %> <br>
+book_name: <%= @book.name %> <br>
+book_author: <%= @book.author %> <br>
+book_description: <%= @book.description %> <br>
+book_edition: <%= @book.edition %> <br>
+book_quantity: <%= @book.quantity %> <br>
+book_creator_id: <%= @book.user.id %> <br>
+book_created_by: <%= @book.user.name %> <br>
+book_creator_email: <%= @book.user.email %> <br>
+book_library_name: <%= @book.user.library_name %> <br>
+book_created_at: <%= @book.created_at %> <br>
+</p>
+

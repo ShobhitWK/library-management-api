@@ -19,6 +19,8 @@ class Books::BooksController < ApplicationController
     @book = Book.new(book_params)
 
     if @book.save
+      # User will get email confirmation after new book creation
+      UserMailer.new_book_creation(@book).deliver_later
       render json: { message: "Book was created sucessfully!" , book: gen_book_data}, status: :created
     else
       handle_error @book.errors
