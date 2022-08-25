@@ -210,6 +210,7 @@ class ApplicationController < ActionController::API
           issue_updated_at: issuedbook.updated_at,
           issued_on: issuedbook.issued_on,
           fine_per_day: issuedbook.fine,
+          submittion_by: issuedbook.submittion,
           bookinfo: {
             book_id: issuedbook.book.id,
             book_name: issuedbook.book.name,
