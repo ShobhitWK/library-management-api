@@ -4,6 +4,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
 
   # respond_to :json
 
+  # POST /users/
   def create
     if current_user
     # only admins can create new user
@@ -32,14 +33,14 @@ class Users::RegistrationsController < Devise::RegistrationsController
             respond_with resource
           end
         else
-          faliure_response({message:"Wrong Parameters provided!"})
+          faliure_response("Wrong Parameters provided!")
         end
       else
         # else send registration failed or not authorize message
         register_failed
       end
     else
-      faliure_response({error: 'Only admins can create new users!'})
+      faliure_response('Only admins can create new users!')
     end
   end
 
@@ -53,7 +54,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
 
   # This method will called if the user registration is sucessfull
   def register_success
-    render json: { "User Created! The details have been sent to the user" => resource_generate(resource) }, status: :created
+    render json: { "message" => "User Created! The details have been sent to the user", "details" => resource_generate(resource) }, status: :created
   end
 
   # Failed responses
@@ -74,13 +75,28 @@ class Users::RegistrationsController < Devise::RegistrationsController
 
   # Method to generate information of new registered user
   def resource_generate(resource)
-    {
-      id: resource.id,
-      name: resource.name,
-      role_id: resource.role_id,
-      role: resource.role.name,
-      created_at: resource.created_at,
-      updated_at: resource.updated_at
-    }
+    data = []
+    if resource.role_id == 1
+      data << {
+        id: resource.id,
+        name: resource.name,
+        role_id: resource.role_id,
+        role: resource.role.name,
+        address: resource.address,
+        library_name: resource.library_name,
+        created_at: resource.created_at,
+        updated_at: resource.updated_at
+      }
+    else
+      data << {
+        id: resource.id,
+        name: resource.name,
+        role_id: resource.role_id,
+        role: resource.role.name,
+        address: resource.address,
+        created_at: resource.created_at,
+        updated_at: resource.updated_at
+      }
+    end
   end
 end

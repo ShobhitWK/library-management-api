@@ -1,5 +1,5 @@
 class ApplicationController < ActionController::API
-  before_action :authenticate_user! # for internal server errors, this will check whether user is logged in or not
+  # before_action :authenticate_user! # for internal server errors, this will check whether user is logged in or not
   before_action :configure_permitted_parameters, if: :devise_controller?
 
   # Errors Handling
@@ -19,8 +19,7 @@ class ApplicationController < ActionController::API
   end
 
   def handlenotfound
-    render html: "not found"
-    render json: { 'message' => "404 Not Found!"}
+    render json: { 'message' => "404 Not Found!"}, status: 404
   end
 
   # For Optimising Code...

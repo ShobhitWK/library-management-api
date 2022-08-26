@@ -2,14 +2,17 @@ class Users::UsersController < ApplicationController
   load_and_authorize_resource
   before_action :get_user_data, except: %i[index profile]
 
+  # GET /users/
   def index
     show_info({ "users" => gen_users })
   end
 
+  # GET /users/:id
   def show
     show_info({ user: gen_user })
   end
 
+  # PUT /users/:id
   def update
     if @user.update(user_params)
       render json: { message: 'user updated succesfully', user: gen_user }
@@ -18,6 +21,7 @@ class Users::UsersController < ApplicationController
     end
   end
 
+  # DELETE /users/:id
   def destroy
     if @user.destroy
       success_response("User deleted successfully with id: #{@user.id}, email: #{@user.email}.")
@@ -26,6 +30,7 @@ class Users::UsersController < ApplicationController
     end
   end
 
+  # GET /profile
   def profile
     if current_user
       @user = current_user

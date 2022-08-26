@@ -5,6 +5,7 @@ class Users::SessionsController < Devise::SessionsController
 
   private
 
+  # POST /users/sign_in
   def respond_with(resource, _opts = {})
     if current_user
       # User sign in mail
@@ -15,6 +16,7 @@ class Users::SessionsController < Devise::SessionsController
     end
   end
 
+  # DELETE /users/sign_out
   def respond_to_on_destroy
     log_out_success && return if current_user
     log_out_failure

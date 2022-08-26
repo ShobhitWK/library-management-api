@@ -4,15 +4,18 @@ class Users::RolesController < ApplicationController
 
   before_action :set_role, only: %i[ show update destroy ]
 
+  # GET /roles
   def index
     @roles = Role.all
     show_info @roles
   end
 
+  # GET /roles/:id
   def show
     show_info @role
   end
 
+  # POST /roles/
   def create
     @role = Role.new(role_params)
 
@@ -23,6 +26,7 @@ class Users::RolesController < ApplicationController
     end
   end
 
+  # PUT /roles/:id
   def update
     if @role.update(role_params)
       render json: {message: "Role edited sucessfully.", role_info: @role }, status: :ok, location: @role
@@ -31,6 +35,7 @@ class Users::RolesController < ApplicationController
     end
   end
 
+  # DELETE /roles/:id
   def destroy
     @role.destroy
     success_response("#{@role.name} has been deleted sucessfully.")

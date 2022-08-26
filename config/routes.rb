@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
 
+  # view user profile
   root 'users/users#profile'
 
   # roles routes
@@ -28,5 +29,9 @@ Rails.application.routes.draw do
   namespace :books do
     resources :books, path: '/'
   end
+
+  # handling routing error
+  get '*path', :to => 'application#handlenotfound'
+  post '*path', :to => 'application#handlenotfound'
 
 end
