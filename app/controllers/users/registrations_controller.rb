@@ -44,7 +44,6 @@ class Users::RegistrationsController < Devise::RegistrationsController
     end
   end
 
-  # test
   private
 
   # Check whether user got registered or not
