@@ -55,7 +55,7 @@ class Books::IssuedbooksController < ApplicationController
         @issuedbook.user = current_user
         @issuedbook.is_returned = false
         @issuedbook.issued_on = DateTime.now
-        @issuedbook.fine = 20.00
+        @issuedbook.fine = 00.00
 
         if @issuedbook.save
           @issuedbook.book.save
@@ -114,10 +114,25 @@ class Books::IssuedbooksController < ApplicationController
         @issuedbook.return_dt = DateTime.now
         @issuedbook.book.quantity += 1 # after a successfull return the book quantity will be increased by 1
         @issuedbook.is_returned = true
-        @issuedbook.save
-        @issuedbook.book.save
-        UserMailer.issue_return_create(@issuedbook).deliver_later
-        success_response(gen_issued_book)
+
+        # add fine functionality
+
+        if @issuedbooks.return_dt > @issuedbooks.submittion
+          days = @issuedbooks.return_dt - @issuedbooks.issued_on
+
+          # fine implementation here ...
+
+          @issuedbook.save
+          @issuedbook.book.save
+          UserMailer.issue_return_create(@issuedbook).deliver_later
+          success_response(gen_issued_book)
+
+        else
+          @issuedbook.save
+          @issuedbook.book.save
+          UserMailer.issue_return_create(@issuedbook).deliver_later
+          success_response(gen_issued_book)
+        end
       else
         faliure_response("This book is not issued by you.")
       end
