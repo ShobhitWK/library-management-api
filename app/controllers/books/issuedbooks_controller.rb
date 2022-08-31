@@ -40,6 +40,7 @@ class Books::IssuedbooksController < ApplicationController
     if @issuedbook.submittion < Date.today
       faliure_response("You're entering wrong submission date.")
     else
+
       # getting current user issued books
       books = current_user.issuedbooks
       array = []
@@ -113,13 +114,13 @@ class Books::IssuedbooksController < ApplicationController
 
     # Checking whether the book is already returned or not
     if @issuedbook.is_returned == true
+      # sending failed res
       faliure_response("Book is already returned")
     else
       if @issuedbook.user == current_user
         @issuedbook.return_dt = Date.today
         @issuedbook.book.quantity += 1 # after a successfull return the book quantity will be increased by 1
         @issuedbook.is_returned = true
-
 
         # generating fine
         if @issuedbook.return_dt > @issuedbook.submittion
