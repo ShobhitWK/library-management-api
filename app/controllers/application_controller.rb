@@ -212,7 +212,7 @@ class ApplicationController < ActionController::API
           issue_created_at: issuedbook.created_at,
           issue_updated_at: issuedbook.updated_at,
           issued_on: issuedbook.issued_on,
-          fine_per_day: issuedbook.fine,
+          fine: issuedbook.fine,
           submission_by: issuedbook.submittion,
           bookinfo: {
             book_id: issuedbook.book.id,
@@ -242,7 +242,7 @@ class ApplicationController < ActionController::API
         issue_created_at: issuedbook.created_at,
         issue_updated_at: issuedbook.updated_at,
         issued_on: issuedbook.issued_on,
-        fine_per_day: issuedbook.fine,
+        fine: issuedbook.fine,
         submission_by: issuedbook.submittion,
         bookinfo: {
           book_id: issuedbook.book.id,

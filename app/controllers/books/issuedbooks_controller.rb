@@ -36,38 +36,43 @@ class Books::IssuedbooksController < ApplicationController
     # only a student can issue a book
     @issuedbook = Issuedbook.new(issuedbook_creation_params)
 
-    # getting current user issued books
-    books = current_user.issuedbooks
-    array = []
-    books.each do |book|
-      if book.is_returned == false
-        array << book.book_id
-      end
-    end
-
-    # checking whether the user has the book already issued
-    if array.include?(@issuedbook.book.id)
-      faliure_response("you already have this book issued")
+    # if user enters old date for submission it will give error
+    if @issuedbook.submittion < Date.today
+      faliure_response("You're entering wrong submission date.")
     else
-      if @issuedbook.book.quantity > 0
-
-        @issuedbook.book.quantity -= 1 # decreasing the quatity of the book viz., issued
-        @issuedbook.user = current_user
-        @issuedbook.is_returned = false
-        @issuedbook.issued_on = DateTime.now
-        @issuedbook.fine = 00.00
-
-        if @issuedbook.save
-          @issuedbook.book.save
-
-          # sending success issue mail to the user
-          UserMailer.issue_request_create(@issuedbook).deliver_later
-          render json: {book_issued: gen_issued_book}, status: :created, location: @issuedbook
-        else
-          handle_error @issuedbook.errors
+      # getting current user issued books
+      books = current_user.issuedbooks
+      array = []
+      books.each do |book|
+        if book.is_returned == false
+          array << book.book_id
         end
+      end
+
+      # checking whether the user has the book already issued
+      if array.include?(@issuedbook.book.id)
+        faliure_response("you already have this book issued")
       else
-        faliure_response("Sorry, This Book is not available for issuing.")
+        if @issuedbook.book.quantity > 0
+
+          @issuedbook.book.quantity -= 1 # decreasing the quatity of the book viz., issued
+          @issuedbook.user = current_user
+          @issuedbook.is_returned = false
+          @issuedbook.issued_on = Date.today
+          @issuedbook.fine = 0.0
+
+          if @issuedbook.save
+            @issuedbook.book.save
+
+            # sending success issue mail to the user
+            # UserMailer.issue_request_create(@issuedbook).deliver_later
+            render json: {book_issued: gen_issued_book}, status: :created, location: @issuedbook
+          else
+            handle_error @issuedbook.errors
+          end
+        else
+          faliure_response("Sorry, This Book is not available for issuing.")
+        end
       end
     end
   end
@@ -111,16 +116,25 @@ class Books::IssuedbooksController < ApplicationController
       faliure_response("Book is already returned")
     else
       if @issuedbook.user == current_user
-        @issuedbook.return_dt = DateTime.now
+        @issuedbook.return_dt = Date.today
         @issuedbook.book.quantity += 1 # after a successfull return the book quantity will be increased by 1
         @issuedbook.is_returned = true
 
-        # add fine functionality
 
-        if @issuedbooks.return_dt > @issuedbooks.submittion
-          days = @issuedbooks.return_dt - @issuedbooks.issued_on
+        # generating fine
+        if @issuedbook.return_dt > @issuedbook.submittion
 
-          # fine implementation here ...
+          days = (@issuedbook.issued_on...@issuedbook.return_dt).count
+
+          if days >= 1 && days <= 5
+            @issuedbook.fine += 20.0
+          elsif days >= 5 && days <= 10
+            @issuedbook.fine += 50.0
+          elsif days >= 10 && days <= 15
+            @issuedbook.fine += 100.0
+          else
+            @issuedbook.fine += days * 15.0
+          end
 
           @issuedbook.save
           @issuedbook.book.save
