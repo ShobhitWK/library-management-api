@@ -22,6 +22,7 @@ class Books::IssuedbooksController < ApplicationController
   # GET /issuedbooks/1
   #
   def show
+
     if current_user.role.name == "admin"
       show_info gen_issued_book
     elsif current_user.id == @issuedbook.user.id
@@ -128,13 +129,13 @@ class Books::IssuedbooksController < ApplicationController
           days = (@issuedbook.issued_on...@issuedbook.return_dt).count
 
           if days >= 1 && days <= 5
-            @issuedbook.fine += 20.0
+            @issuedbook.fine = 20.0
           elsif days >= 5 && days <= 10
-            @issuedbook.fine += 50.0
+            @issuedbook.fine = 50.0
           elsif days >= 10 && days <= 15
-            @issuedbook.fine += 100.0
+            @issuedbook.fine = 100.0
           else
-            @issuedbook.fine += days * 15.0
+            @issuedbook.fine = days * 15.0
           end
 
           @issuedbook.save

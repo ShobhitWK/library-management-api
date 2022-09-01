@@ -202,6 +202,19 @@ class ApplicationController < ActionController::API
     data=[]
     if many == true
       @issuedbooks.each do |issuedbook|
+        if Date.today > issuedbook.submittion && issuedbook.is_returned == false
+          days = (issuedbook.issued_on...Date.today).count
+          if days >= 1 && days <= 5
+            issuedbook.fine = 20.0
+          elsif days >= 5 && days <= 10
+            issuedbook.fine = 50.0
+          elsif days >= 10 && days <= 15
+            issuedbook.fine = 100.0
+          else
+            issuedbook.fine = days.to_f * 15.0
+          end
+          issuedbook.save
+        end
         data << {
           id: issuedbook.id,
           issued_to_user_id: issuedbook.user.id,
@@ -231,7 +244,21 @@ class ApplicationController < ActionController::API
         }
       end
     else
+      if Date.today > @issuedbook.submittion && @issuedbook.is_returned == false
+        days = (@issuedbook.issued_on...Date.today).count
+        if days >= 1 && days <= 5
+          @issuedbook.fine = 20.0
+        elsif days >= 5 && days <= 10
+          @issuedbook.fine = 50.0
+        elsif days >= 10 && days <= 15
+          @issuedbook.fine = 100.0
+        else
+          @issuedbook.fine = days * 15.0
+        end
+        @issuedbook.save
+      end
       issuedbook = @issuedbook
+
       data << {
         id: issuedbook.id,
         issued_to_user_id: issuedbook.user.id,
