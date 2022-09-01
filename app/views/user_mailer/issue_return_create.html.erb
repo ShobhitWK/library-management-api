@@ -15,6 +15,14 @@ issued_on: <%= @issuedbook.issued_on %><br>
 fine_per_day: <%= @issuedbook.fine %><br>
 submission_by: <%= @issuedbook.submittion %><br>
 <br><br>
+
+<% if @url == nil %>
+  <br>
+<% else %>
+  <h3>You need to Pay Fine! (use below link to pay fine)</h3>
+  <p> <%= @url %></p>
+<% end %>
+
 <h3>Book Details</h3>
 book_name: <%= @issuedbook.book.name %><br>
 book_author: <%= @issuedbook.book.author %><br>

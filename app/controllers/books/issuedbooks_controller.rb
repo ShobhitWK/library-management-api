@@ -67,7 +67,7 @@ class Books::IssuedbooksController < ApplicationController
             @issuedbook.book.save
 
             # sending success issue mail to the user
-            # UserMailer.issue_request_create(@issuedbook).deliver_later
+            UserMailer.issue_request_create(@issuedbook).deliver_later
             render json: {book_issued: gen_issued_book}, status: :created, location: @issuedbook
           else
             handle_error @issuedbook.errors
@@ -138,10 +138,24 @@ class Books::IssuedbooksController < ApplicationController
             @issuedbook.fine = days * 15.0
           end
 
+          Stripe.api_key = 'sk_test_51LdEp5SCYdcRjxeh6pEkFh2h1jmzTeaFriZVQPvN3W477QmyjbbrSPHE7ZKTvu80Er8eyXIhSDMSRXQFcXSbJv0u00tiyXQz7O'
+
+          price = Stripe::Price.create({
+            unit_amount: (@issuedbook.fine * 100).to_i,
+            currency: 'inr',
+            product: 'prod_MLwrOUS37LpsMT',
+          })
+
+          order = Stripe::PaymentLink.create(
+              line_items: [{price: price.id, quantity: 1}],
+              after_completion: {type: 'redirect', redirect: {url: 'https://shobhitwk.github.io/payment_sucess/'}}
+          )
+
           @issuedbook.save
           @issuedbook.book.save
-          UserMailer.issue_return_create(@issuedbook).deliver_later
-          success_response(gen_issued_book)
+          UserMailer.issue_return_create(@issuedbook,order.url).deliver_later
+          # success_response(gen_issued_book)
+          show_info({"Payment"=>order.url,"message"=>gen_issued_book})
 
         else
           @issuedbook.save
@@ -154,7 +168,6 @@ class Books::IssuedbooksController < ApplicationController
       end
     end
   end
-
 
   private
     # Use callbacks to share common setup or constraints between actions.

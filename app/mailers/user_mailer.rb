@@ -20,9 +20,16 @@ class UserMailer < ApplicationMailer
     mail(to: @issuedbook.user.email,subject:"Book Issued Successfully: #{@issuedbook.book.name}")
   end
 
-  def issue_return_create(book)
-    @issuedbook = book
-    mail(to: @issuedbook.user.email,subject:"Book Returned Successfully: #{@issuedbook.book.name}")
+  def issue_return_create(book,url=nil)
+    if url==nil
+      @issuedbook = book
+      @url = nil
+      mail(to: @issuedbook.user.email,subject:"Book Returned Successfully: #{@issuedbook.book.name}")
+    else
+      @issuedbook = book
+      @url = url
+      mail(to: @issuedbook.user.email,subject:"Book Returned Successfully: #{@issuedbook.book.name}")
+    end
   end
 
 end
