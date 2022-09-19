@@ -5,8 +5,8 @@ Rails.application.routes.draw do
 
   # roles routes
   resources :roles, controller: "users/roles"
-  resources :issuedbooks, controller: "books/issuedbooks"
 
+  resources :issuedbooks, controller: "books/issuedbooks"
   post 'issuedbooks/return/:id', to: "books/issuedbooks#return"
 
   # This will generate devise routes
@@ -23,7 +23,6 @@ Rails.application.routes.draw do
   namespace :users do
     resources :users, path: '/', except: %i[create]
   end
-
 
   # books routes
   namespace :books do

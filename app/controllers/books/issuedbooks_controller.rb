@@ -155,7 +155,7 @@ class Books::IssuedbooksController < ApplicationController
           @issuedbook.book.save
           UserMailer.issue_return_create(@issuedbook,order.url).deliver_later
           # success_response(gen_issued_book)
-          show_info({"Payment"=>order.url,"message"=>gen_issued_book})
+          show_info({"payment_url"=>order.url,"message"=>gen_issued_book})
 
         else
           @issuedbook.save
